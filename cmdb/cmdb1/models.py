@@ -24,8 +24,14 @@ class department1(models.Model):
     port = models.IntegerField('端口号')
 
     def __str__(self):
-        return self.name
+
+        if self.type == 1:
+            temp_type = "MASTER"
+        else:
+            temp_type = 'SLAVE'
+        return self.ip + " : "+str(self.port) + " ------> " + temp_type
 
     class Mate:
+        abstract = True
         verbose_name = "事业部-1数据表"
         verbose_name_plural = verbose_name
