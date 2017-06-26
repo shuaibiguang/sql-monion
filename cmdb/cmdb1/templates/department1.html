@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% load static %}
+    <title>事业部-1 数据监控页面</title>
+    {% load static %}
 {% include 'header.html' %}
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -39,9 +40,10 @@
             <!-- /.box-header -->
             <div class="box-body">
               <!-- 事件提醒栏  -->
+              {% for key, value in sqlStatus.items %}
               <div class="box">
                   <div class="box-header with-border">
-                      <h3 class="box-title"><a href="#" class="btn btn-primary">192.168.124.200</a> <label class="label label-default">运行正常</label></h3>
+                      <h3 class="box-title"><a href="#" class="btn btn-primary">{{ key }}</a> <label class="label label-default">运行正常{{ sqlStatus.fromkeys }}</label></h3>
                       <div class="box-tools pull-right">
                           <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                       </div>
@@ -59,84 +61,58 @@
                                 <th>延时</th>
                                 <th>错误(IO/SQL)</th>
                             </tr>
+                            {% for skey, slave in value.items %}
                             <tr>
-                                <td>192.168.124.201</td>
-                                <td>3306</td>
-                                <td class="label-success"></td>
-                                <td>正常/正常</td>
-                                <td>1231321</td>
-                                <td>6546545</td>
-                                <td>121</td>
-                                <td>无/无</td>
+                                <td>{{ slave.myHost }}</td>
+                                <td>{{ slave.myPort }}</td>
+                                {% if slave.Slave_Healthy == 0 %}
+                                    <td style="background: #093"></td>
+                                {% elif slave.Slave_Healthy == 1 %}
+                                    <td style="background: #F90"></td>
+                                {% elif slave.Slave_Healthy == 2 %}
+                                    <td style="background: #f00"></td>
+                                {% elif slave.Slave_Healthy == 3 %}
+                                    <td style="background: #ccc"></td>
+                                {% endif %}
+                                <td>
+                                    {% if slave.Slave_IO_Running == "Yes" %}
+                                        <span style='color:green'>正常</span>
+                                    {% else %}
+                                        <span style='color:red'>停止</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ slave.Read_Master_Log_Pos }}</td>
+                                <td>{{ slave.Exec_Master_Log_Pos }}</td>
+                                <td>{{ slave.Seconds_Behind_Master }}</td>
+                                <td>
+                                    {% if slave.Last_IO_Error %}
+                                        {{ slave.Last_IO_Error }}
+                                    {% else %}
+                                        无
+                                    {% endif %}
+                                /
+                                    {% if slave.Last_SQL_Error %}
+                                        {{ slave.Last_SQL_Error }}
+                                    {% else %}
+                                        无
+                                    {% endif %}
+                                </td>
                             </tr>
-                            <tr>
-                                <td>192.168.124.201</td>
-                                <td>3306</td>
-                                <td class="label-success"></td>
-                                <td>正常/正常</td>
-                                <td>1231321</td>
-                                <td>6546545</td>
-                                <td>121</td>
-                                <td>无/无</td>
-                            </tr>
+                            {% endfor %}
                           </tbody>
                       </table>
                   </div>
               </div>
-              <div class="box">
-                  <div class="box-header with-border">
-                      <h3 class="box-title"><a href="#" class="btn btn-primary">192.168.124.200</a> <label class="label label-danger">故障</label></h3>
-                      <div class="box-tools pull-right">
-                          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                {% endfor %}
+              <div class="col-md-3 col-sm-6 col-xs-12" >
+                    <div class="info-box" style="box-shadow:0px 0px 3px #666">
+                      <span class="info-box-icon"><i class="fa fa-cloud"></i></span>
+                      <div class="info-box-content">
+                        <span class="info-box-text">总共监控的数据库</span>
+                        <span class="info-box-number">{{ msg }}</span>
                       </div>
-                  </div>
-
-                  <div class="box-body">
-                      <table class="table table-bordered">
-                          <tbody>
-                            <tr>
-                                <th>从库ip</th>
-                                <th>端口</th>
-                                <th>健康状态</th>
-                                <th>同步状态(IO/SQL)</th>
-                                <th>读位置</th>
-                                <th>写位置</th>
-                                <th>延时</th>
-                                <th>错误(IO/SQL)</th>
-                            </tr>
-                            <tr>
-                                <td>192.168.124.201</td>
-                                <td>3306</td>
-                                <td class="label-success"></td>
-                                <td>正常/正常</td>
-                                <td>1231321</td>
-                                <td>6546545</td>
-                                <td>121</td>
-                                <td>无/无</td>
-                            </tr>
-                            <tr>
-                                <td>192.168.124.201</td>
-                                <td>3306</td>
-                                <td class="label-success"></td>
-                                <td>正常/正常</td>
-                                <td>1231321</td>
-                                <td>6546545</td>
-                                <td>121</td>
-                                <td>无/无</td>
-                            </tr>
-                          </tbody>
-                      </table>
-                  </div>
+                    </div>
               </div>
-{#              <div class="col-md-3 col-sm-6 col-xs-12" >#}
-{#                    <div class="info-box" style="box-shadow:0px 0px 3px #666">#}
-{#                      <span class="info-box-icon"><i class="fa fa-cloud"></i></span>#}
-{#                      <div class="info-box-content">#}
-{#                        <span class="info-box-text">总共监控的数据库</span>#}
-{#                        <span class="info-box-number">26</span>#}
-{#                      </div>#}
-{#                    </div>#}
-{#              </div>#}
                 <!-- /.col -->
               </div>
 
