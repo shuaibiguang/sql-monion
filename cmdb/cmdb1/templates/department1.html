@@ -43,7 +43,17 @@
               {% for key, value in sqlStatus.items %}
               <div class="box">
                   <div class="box-header with-border">
-                      <h3 class="box-title"><a href="#" class="btn btn-primary">{{ key }}</a> <label class="label label-default">运行正常{{ sqlStatus.fromkeys }}</label></h3>
+                      <h3 class="box-title"><a href="#" class="btn btn-primary">{{ key }}</a>
+                          {% for k, v in masterStatus.items %}
+                              {% if k == key %}
+                                  {% if v == 'ok' %}
+                                     <label class="label label-default">运行正常</label>
+                                      {% else %}
+                                      <label class="label label-danger">失联</label>
+                                  {% endif %}
+                              {% endif %}
+                          {% endfor %}
+                          </h3>
                       <div class="box-tools pull-right">
                           <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                       </div>

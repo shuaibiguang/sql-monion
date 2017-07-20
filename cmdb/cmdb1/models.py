@@ -22,6 +22,8 @@ class department1(models.Model):
     username = models.CharField('账号',max_length=64)
     password = models.CharField('密码',max_length=64)
     port = models.IntegerField('端口号')
+    master_ip = models.GenericIPAddressField(default='',null=True,blank=True)
+    master_port = models.IntegerField('主库端口号',null=True,blank=True)
 
     def __str__(self):
 

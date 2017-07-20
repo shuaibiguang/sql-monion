@@ -5,6 +5,8 @@ class processor():
     @classmethod
     def loop(self, host, port, user, password):
         servers = {}
+        servers['myHost'] = host
+        servers['myPort'] = port
         try:
             link = pymysql.connect(host=host, user=user, password=password, port=port,
                                    charset="utf8mb4", cursorclass=pymysql.cursors.DictCursor)
@@ -34,3 +36,12 @@ class processor():
         row['myPort'] = port
         servers = row
         return servers
+
+    @classmethod
+    def master(self, host,port, user, password):
+        try:
+            link = pymysql.connect(host=host, user=user, password=password, port=port,
+                                   charset="utf8mb4", cursorclass=pymysql.cursors.DictCursor)
+        except Exception as e:
+            return 'err'
+        return 'ok'
